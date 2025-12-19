@@ -1,260 +1,186 @@
-MAUS Whitepaper (v1)
 
-Status: Public-safe architectural overview
-Scope: Vision, architecture, and economic model
-Excludes: Implementation details, cryptography specifics, security mechanisms, deployment instructions
+---
 
-Abstract
+## Layer 1 — MAUS Runtime Grid
 
-MAUS (Modular Autonomous Universal System) is a layered, decentralized operating environment designed to support high-throughput interaction, autonomous devices, and persistent user systems while anchoring truth and value to Bitcoin. MAUS separates interaction speed from economic finality, enabling scale without sacrificing decentralization or security.
+**Purpose:** Absorb all high-frequency activity.
 
-Core Principles
+**Characteristics:**
+- 10,000 → 1,000,000+ internal events per second
+- Fast, mutable, non-final
+- Local enforcement of permissions and access
 
-Separation of Concerns
-Runtime interaction, truth recording, and settlement are isolated into distinct layers.
+**Handles:**
+- Users
+- Robots / autonomous devices
+- UI interactions
+- Internal signals and coordination
 
-Compression Over Throughput
-High-frequency activity is compressed into periodic summaries rather than written directly to settlement layers.
+This layer is optimized for **speed**, not permanence.
 
-Authority Down, Energy Up
-Activity flows upward through layers; authority and finality flow downward.
+---
 
-Bitcoin as Settlement, Not Runtime
-Bitcoin is reserved for settlement, ownership, and immutable anchoring only.
+## Layer 2 — MAUS Chain
 
-The MAUS Triangle Architecture
-1. MAUS Runtime Grid (Bottom Layer)
+**Purpose:** Record authoritative truth over time.
 
-High-TPS environment (10k–1M+ events/sec)
+**Characteristics:**
+- Time-layered snapshot ledger
+- Snapshot cadence: **every 3–5 minutes**
+- Append-only, ordered, auditable
 
-Handles:
+Each block represents a frozen slice of MAUS reality.
 
-Users
+### Canonical Block Contents
 
-Robots / devices
+- Block height
+- Snapshot time window (start / end)
+- Previous block hash
+- **Node summaries**
+  - node_id
+  - contribution type
+  - total contribution
+  - status
+- **User summaries**
+  - user_id
+  - subscription state
+  - permissions
+- Merkle root
+- Validator signatures
 
-UI events
+Raw runtime events never appear on this chain.
 
-Internal signals
+---
 
-Fast, mutable, local, non-final
+## Validators (v1)
 
-This layer absorbs all transaction pressure.
+MAUS Chain validation begins as **permissioned**.
 
-2. MAUS Chain (Middle Layer)
+**Initial configuration:**
+- 3 validators
+- N-of-M signature requirement (e.g. 2-of-3)
 
-Time-layered truth ledger
+**Validator responsibilities:**
+- Verify identity integrity
+- Validate contribution consistency
+- Ensure correct snapshot timing
+- Sign finalized blocks
 
-Snapshot cadence: every 3–5 minutes
+Validators do **not**:
+- control runtime execution
+- manage funds
+- interact with robots directly
 
-Each block represents a frozen slice of MAUS reality
+---
 
-Records summarized state, not raw events:
+## Bitcoin Anchoring
 
-Device contributions
+**Anchor cadence:** Hourly  
+**Anchored data:** MAUS Chain block hash / Merkle root
 
-User permissions
-
-Subscription status
-
-System integrity
-
-Acts as the authoritative history of MAUS.
-
-3. Bitcoin (Top Layer)
-
-Global settlement and public finality
-
-~10-minute block target
-
-Anchors MAUS Chain history via cryptographic hashes
+Anchoring provides:
+- Public auditability
+- Irreversible history
+- Trust minimization
 
 Bitcoin never processes MAUS runtime activity directly.
 
-MAUS Chain Design
-Block Contents (Canonical)
+---
 
-Each MAUS block contains:
+## Economic Model
 
-Block height
+> **Robots earn. MAUS accounts. Bitcoin settles.**
 
-Time window (start / end)
-
-Previous block hash
-
-Node summaries
-
-node_id
-
-contribution type
-
-total contribution
-
-status
-
-User summaries
-
-user_id
-
-subscription state
-
-permissions
-
-Merkle root
-
-Validator signatures
-
-Validators (V1)
-
-Permissioned validator set
-
-Initial configuration: 3 validators
-
-Consensus: N-of-M signatures (e.g. 2-of-3)
-
-Validators verify:
-
-Identity integrity
-
-Ledger consistency
-
-Time correctness
-
-Signature validity
-
-Validators do not control runtime or funds.
-
-Bitcoin Anchoring
-
-Anchor cadence: Hourly
-
-Anchored data: MAUS block hash / Merkle root
-
-Method: Bitcoin transaction (e.g. OP_RETURN)
-
-Purpose:
-
-Public auditability
-
-Irreversible history
-
-Trust minimization
-
-Economic Model
-
-Robots earn. MAUS accounts. Bitcoin settles.
-
-Device Identity & Admission
+### Device Identity
 
 Each earning device has:
+- `node_id` (unique identifier)
+- `public_key` (signing identity)
+- `device_type` (robot | miner | pc | asic | other)
+- `status` (pending | approved | revoked)
 
-node_id (unique)
+Only **approved** devices may contribute.
 
-public_key (signing identity)
+---
 
-device_type (robot | miner | pc | asic | other)
+## Contribution Reporting
 
-status (pending | approved | revoked)
+Devices submit signed reports containing:
+- node_id
+- timestamp
+- contribution type
+- amount
+- signature
 
-Only approved devices may contribute.
+Reports are verified and aggregated locally before being summarized into MAUS Chain snapshots.
 
-Contribution Reporting
+---
 
-Devices submit signed reports:
+## Internal Ledger
 
-node_id
+- Append-only contribution ledger
+- Used for rewards, access control, and audits
+- Periodically snapshotted into the MAUS Chain
 
-timestamp
+This ledger is internal and non-settling.
 
-contribution type
+---
 
-amount
+## Subscriptions
 
-signature
+Access to MAUS resources requires an **active Bitcoin-paid subscription**.
 
-Reports are verified and aggregated locally.
+**Enforcement model:**
+- Enforced locally by the runtime
+- Bitcoin interaction only at lifecycle boundaries
 
-Internal Ledger
+**Minimal subscription record:**
+- account_id
+- subscription status
+- tier
+- paid_until timestamp
+- last Bitcoin transaction ID
 
-Append-only contribution ledger
+---
 
-Used for:
+## Settlement & Payouts
 
-reward calculation
+- Rewards are calculated from MAUS Chain summaries
+- Bitcoin payouts occur on defined settlement intervals
+- Devices and users never directly control settlement logic
 
-subscription enforcement
+---
 
-audits
+## Public Scope & Disclosure
 
-Snapshotted into the MAUS Chain
+This document is intentionally **public-safe**.
 
-Subscriptions
+### Included
+- System architecture
+- Economic flow
+- Layered consensus model
+- Bitcoin settlement philosophy
 
-Access requires an active Bitcoin-paid subscription
+### Explicitly Excluded
+- Cryptographic primitives
+- Validator networking topology
+- Key management
+- Security procedures
+- Deployment instructions
+- Firmware or hardware control logic
 
-Enforced locally by the runtime
+### Companion Documents (Not Public)
+- MAUS Technical Specification (Yellowpaper)
+- MAUS Operations & Security Documentation
 
-Bitcoin interaction only at lifecycle boundaries
+---
 
-Minimal record:
+## Conclusion
 
-account_id
+MAUS enables large-scale interaction and autonomous participation without overloading settlement layers or compromising decentralization.
 
-subscription status
+By treating Bitcoin as the immutable settlement ceiling rather than the execution floor, MAUS achieves scalability, auditability, and long-term economic integrity.
 
-tier
-
-paid_until timestamp
-
-last BTC txid
-
-Payouts & Settlement
-
-Rewards calculated from MAUS Chain summaries
-
-Bitcoin payouts occur on defined settlement intervals
-
-Devices and users never directly control settlement logic
-
-Public Scope & Disclosure
-Document Classification
-
-This whitepaper is intentionally public-safe. It describes MAUS at the level of architecture, principles, and economic flow only.
-
-Included
-
-System architecture
-
-Layered consensus model
-
-Economic structure
-
-Bitcoin’s role as settlement
-
-Explicitly Excluded
-
-Cryptographic primitives
-
-Validator networking topology
-
-Key management
-
-Firmware or hardware control
-
-Security procedures
-
-Deployment details
-
-Companion Documents (Not Public)
-
-MAUS Technical Specification (Yellowpaper)
-
-MAUS Operations & Security Documentation
-
-This separation follows best practices used by major infrastructure and blockchain projects.
-
-Closing Statement
-
-MAUS is designed to scale interaction without sacrificing decentralization by treating Bitcoin as the immutable settlement ceiling rather than the execution floor. This layered approach enables autonomous devices, subscription-based access, and long-term auditability while remaining economically and technically sustainable.
-
-Status: Canon architecture locked. Implementation in progress.
+**Architecture:** Locked  
+**Whitepaper:** v1  
+**Implementation:** In progress
