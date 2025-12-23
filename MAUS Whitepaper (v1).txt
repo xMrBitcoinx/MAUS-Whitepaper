@@ -1,4 +1,3 @@
-📄 Whitepaper Update — COPY/PASTE READY
 Implementation Status (v0.1.0 — Alpha)
 
 Implementation Status Notice
@@ -6,6 +5,7 @@ Implementation Status Notice
 As of v0.1.0 (Alpha), MAUS exists as a native Windows desktop application.
 This release represents the first compiled, executable form of the MAUS system and is intended for architectural validation, interface experimentation, and iterative development.
 
-The current implementation focuses on establishing a modular, visual-first desktop environment capable of supporting future extensions, plugins, and system-level experimentation. Functionality related to decentralization, Bitcoin-adjacent research, and user-controlled systems is exploratory in nature and not yet production-deployed.
+The current implementation focuses on establishing a modular, visual-first desktop environment capable of supporting future extensions, plugins, and system-level experimentation. Functionality related to decentralization, 
+Bitcoin-adjacent research, and user-controlled systems is exploratory in nature and not yet production-deployed.
 
 MAUS is being developed incrementally, with this Alpha release serving as a foundation for future iterations rather than a finalized product. All concepts described in this document should be understood as evolving unless explicitly stated otherwise.
